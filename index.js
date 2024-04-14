@@ -4,6 +4,7 @@ const home = require("./routes/home");
 const VerifiedOffer = require("./routes/verified_offers");
 const mongoose = require('mongoose');
 const cors = require('cors');
+const res = require("express/lib/response");
 
 // Middlewares
 const app = express();
@@ -28,6 +29,7 @@ mongoose.connect('mongodb+srv://moiz36:4RGR6pM_Yh-cx7z@cluster0.ocumynd.mongodb.
 .catch((error) => {
   console.error('Error connecting to MongoDB:', error);
 });
+
 
 // Routes
 app.use("/home", home);
