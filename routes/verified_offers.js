@@ -30,11 +30,12 @@ router.get('/', async (req, res) => {
     try {
       // Use Mongoose to find all documents in the "verified_offers" collection
       const offers = await VerifiedOffer.findOne();
-  
+      console.time();
       // Return the fetched data as a response
       res.json(offers);
     } catch (error) {
       // If an error occurs, return an error response
+      console.time();
       res.status(500).json({ message: error.message });
     }
   });
