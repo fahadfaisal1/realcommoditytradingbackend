@@ -29,7 +29,7 @@ const VerifiedOffer = mongoose.model('VerifiedOffer', verified_offers_Mongoose);
 router.get('/', async (req, res) => {
     try {
       // Use Mongoose to find all documents in the "verified_offers" collection
-      const offers = await VerifiedOffer.find();
+      const offers = await VerifiedOffer.findOne();
   
       // Return the fetched data as a response
       res.json(offers);
