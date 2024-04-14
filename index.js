@@ -10,7 +10,7 @@ const app = express();
 
 // Set up CORS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://realcommoditytradingbackend.vercel.app'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
