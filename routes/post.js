@@ -1,7 +1,10 @@
-import mongoose from "mongoose";
+const express = require("express");
+const mongoose = require("mongoose");
+
+const router = express.Router();
 const Schema = mongoose.Schema;
-const model = mongoose.model;
-export const post_Mongoose = new Schema({
+
+const postSchema = new Schema({
     "_id": mongoose.ObjectId,
     "id": Number,
     "offer_type": Number,
@@ -54,62 +57,57 @@ export const post_Mongoose = new Schema({
     "allow_to_share": Number,
     "created_at": Date,
     "updated_at": Date,
-}, { collection: "post" })
-export const post_MongooseModel = model("post_MongooseModel", post_Mongoose);
+}, { collection: "post" });
+
+const postModel = mongoose.model("postModel", postSchema);
 
 router.get('/', async (req, res) => {
     try {
-      // Use Mongoose to find all documents in the "verified_offers" collection
-      const post = await post_MongooseModel.find();
-      // Return the fetched data as a response
-      res.json(post);
+        const post = await postModel.find();
+        res.json(post);
     } catch (error) {
-      // If an error occurs, return an error response
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
+});
 
-  // Route to find one post by ID
 router.get('/:id', async (req, res) => {
     try {
-      const post = await post_MongooseModel.findOne({ _id: req.params.id });
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      res.json(post);
+        const post = await postModel.findOne({ _id: req.params.id });
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json(post);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  // Route to delete one post by ID
-  router.delete('/:id', async (req, res) => {
+});
+
+router.delete('/:id', async (req, res) => {
     try {
-      const deletedPost = await post_MongooseModel.findOneAndDelete({ _id: req.params.id });
-      if (!deletedPost) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      res.json({ message: 'Post deleted successfully' });
+        const deletedPost = await postModel.findOneAndDelete({ _id: req.params.id });
+        if (!deletedPost) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json({ message: 'Post deleted successfully' });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  // Route to update one post by ID
-  router.patch('/:id', async (req, res) => {
+});
+
+router.patch('/:id', async (req, res) => {
     try {
-      const updatedPost = await post_MongooseModel.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
-        { new: true }
-      );
-      if (!updatedPost) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      res.json(updatedPost);
+        const updatedPost = await postModel.findOneAndUpdate(
+            { _id: req.params.id },
+            req.body,
+            { new: true }
+        );
+        if (!updatedPost) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json(updatedPost);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  export default router;
+});
+
+module.exports = router;

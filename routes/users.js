@@ -1,7 +1,10 @@
-import mongoose from "mongoose";
+const express = require("express");
+const mongoose = require("mongoose");
+const router = express.Router();
 const Schema = mongoose.Schema;
-const model = mongoose.model;
-export const users_Mongoose = new Schema({
+
+// Schema definition
+const usersSchema = new Schema({
     "_id": mongoose.ObjectId,
     "id": Number,
     "user_type": String,
@@ -26,62 +29,61 @@ export const users_Mongoose = new Schema({
     "social_type": String,
     "created_at": String,
     "updated_at": String,
-}, { collection: "users" })
-export const users_MongooseModel = model("users_MongooseModel", users_Mongoose);
+}, { 
+    collection: "users" }
+);
 
+// Model definition
+const usersModel = mongoose.model("usersModel", usersSchema);
+
+// Routes
 router.get('/', async (req, res) => {
     try {
-      // Use Mongoose to find all documents in the "verified_offers" collection
-      const users = await users_MongooseModel.find();
-      // Return the fetched data as a response
-      res.json(users);
+        const users = await usersModel.find();
+        res.json(users);
     } catch (error) {
-      // If an error occurs, return an error response
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
+});
 
-  // Route to find one user by ID
 router.get('/:id', async (req, res) => {
     try {
-      const user = await users_MongooseModel.findOne({ _id: req.params.id });
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(user);
+        const user = await usersModel.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  // Route to delete one user by ID
-  router.delete('/:id', async (req, res) => {
+});
+
+router.delete('/:id', async (req, res) => {
     try {
-      const deletedUser = await users_MongooseModel.findOneAndDelete({ _id: req.params.id });
-      if (!deletedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json({ message: 'User deleted successfully' });
+        const deletedUser = await usersModel.findOneAndDelete({ _id: req.params.id });
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ message: 'User deleted successfully' });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  // Route to update one user by ID
-  router.patch('/:id', async (req, res) => {
+});
+
+router.patch('/:id', async (req, res) => {
     try {
-      const updatedUser = await users_MongooseModel.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
-        { new: true }
-      );
-      if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(updatedUser);
+        const updatedUser = await usersModel.findOneAndUpdate(
+            { _id: req.params.id },
+            req.body,
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(updatedUser);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  });
-  
-  export default router;
+});
+
+module.exports = router;
